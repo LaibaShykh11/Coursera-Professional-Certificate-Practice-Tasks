@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Explorer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: rgba(240, 240, 240, 0.95);
+      padding: 10px 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 20px;
+      flex: 1;
+    }
+
+    .nav-links {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #0077cc;
+    }
+
+    .search-section {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-section input {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .search-section button {
+      padding: 6px 10px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .search-section button:hover {
+      background-color: #005fa3;
+    }
+
+    /* Sections */
+    section {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    /* Home */
+    .home {
+      background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+
+    .intro {
+      position: relative;
+      z-index: 2;
+      max-width: 600px;
+    }
+
+    .intro h1 {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .intro p {
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    .intro button {
+      padding: 10px 20px;
+      background-color: #0077cc;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .intro button:hover {
+      background-color: #005fa3;
+    }
+
+    /* About & Contact */
+    .about {
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    .contact {
+      background-color: #e9f2ff;
+      color: #333;
+    }
+
+    .about h2, .contact h2 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .about p, .contact p {
+      font-size: 1.1rem;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    /* Cards */
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      width: 280px;
+      text-align: left;
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 15px;
+    }
+
+    .card-content h3 {
+      margin-bottom: 10px;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">Travel Explorer</div>
+
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <div class="search-section">
+      <input id="searchInput" type="text" placeholder="Search for 'beach', 'temple', or 'country'">
+      <button onclick="searchRecommendations()">🔍</button>
+      <button onclick="clearResults()">Reset</button>
+    </div>
+  </div>
+
+  <!-- Home Section -->
+  <section id="home" class="home">
+    <div class="overlay"></div>
+    <div class="intro">
+      <h1>Welcome to Travel Explorer</h1>
+      <p>Discover breathtaking destinations, plan your adventures, and explore the world with ease.</p>
+      <button>Get Started</button>
+    </div>
+  </section>
+
+  <!-- Results Section -->
+  <section id="results" style="padding: 60px 20px; text-align: center;">
+    <h2>Recommended Places</h2>
+    <div id="recommendations" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 20px;"></div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="about">
+    <h2>About Us</h2>
+    <p>Travel Explorer is your go-to platform for exploring beautiful destinations across the globe. We make travel planning simple and exciting by connecting you to breathtaking locations and hidden gems.</p>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="contact">
+    <h2>Contact Us</h2>
+    <p>Have questions or need travel tips? Reach out to us at <strong>support@travelexplorer.com</strong> and our team will assist you.</p>
+  </section>
+
+  <!-- JavaScript -->
+  <script>
+    let travelData = {};
+
+    // Fetch JSON data
+    fetch('travel_recommendation_api.json')
+      .then(response => response.json())
+      .then(data => {
+        travelData = data;
+        console.log("Data loaded:", travelData);
+      })
+      .catch(error => console.error("Error loading data:", error));
+
+    function searchRecommendations() {
+      const input = document.getElementById('searchInput').value.toLowerCase().trim();
+      const resultsDiv = document.getElementById('recommendations');
+      resultsDiv.innerHTML = '';
+
+      if (!input) {
+        resultsDiv.innerHTML = '<p>Please enter a keyword.</p>';
+        return;
+      }
+
+      let results = [];
+
+      if (input.includes('beach')) results = travelData.beaches || [];
+      else if (input.includes('temple')) results = travelData.temples || [];
+      else if (input.includes('country')) {
+        travelData.countries?.forEach(c => c.cities.forEach(city => results.push(city)));
+      }
+
+      if (results.length === 0) {
+        resultsDiv.innerHTML = '<p>No destinations found. Try "beach", "temple", or "country".</p>';
+        return;
+      }
+
+      results.forEach(place => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${place.imageUrl}" alt="${place.name}">
+          <div class="card-content">
+            <h3>${place.name}</h3>
+            <p>${place.description}</p>
+          </div>
+        `;
+        resultsDiv.appendChild(card);
+      });
+    }
+
+    function clearResults() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('recommendations').innerHTML = '';
+    }
+  </script>
+</body>
+</html>
